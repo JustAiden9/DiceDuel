@@ -11,9 +11,21 @@ struct ContentView: View {
     @State private var randomValue2 = 1
     @State private var rotation1 = 0.0
     @State private var rotation2 = 0.0
+    @State private var hp1 = 10
+    @State private var hp2 = 10
     
     var body: some View {
         VStack {
+            VStack(spacing: 4) {
+                ProgressView(value: Double(hp1), total: 10)
+                    .progressViewStyle(LinearProgressViewStyle())
+                    .frame(width: 140)
+                Text("HP: \(hp1)/10")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.bottom, 8)
+            
             Image("pips \(randomValue1)")
                 .resizable()
                 .frame(width: 150, height: 150)
@@ -37,6 +49,16 @@ struct ContentView: View {
                         rotation2 += 360
                     }
                 }
+            
+            VStack(spacing: 4) {
+                ProgressView(value: Double(hp2), total: 10)
+                    .progressViewStyle(LinearProgressViewStyle())
+                    .frame(width: 140)
+                Text("HP: \(hp2)/10")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.top, 8)
         }
         .frame(maxHeight: .infinity)
     }
