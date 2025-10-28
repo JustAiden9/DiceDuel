@@ -14,35 +14,31 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Text("Dice Roll")
-                .font(.title)
-                .padding()
-            HStack(spacing: 40) {
-                Image("pips \(randomValue1)")
-                    .resizable()
-                    .frame(width: 150, height: 150, alignment: .center)
-                    .rotationEffect(.degrees(rotation1))
-                    .rotation3DEffect(.degrees(rotation1), axis: (x: 1, y: 1, z: 0))
-                    .onTapGesture {
-                        chooseRandom1(times: 3)
-                        withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
-                            rotation1 += 360
-                        }
+            Image("pips \(randomValue1)")
+                .resizable()
+                .frame(width: 150, height: 150)
+                .rotationEffect(.degrees(rotation1))
+                .rotation3DEffect(.degrees(rotation1), axis: (x: 1, y: 1, z: 0))
+                .onTapGesture {
+                    chooseRandom1(times: 3)
+                    withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
+                        rotation1 += 360
                     }
-                Image("pips \(randomValue2)")
-                    .resizable()
-                    .frame(width: 150, height: 150, alignment: .center)
-                    .rotationEffect(.degrees(rotation2))
-                    .rotation3DEffect(.degrees(rotation2), axis: (x: 1, y: 1, z: 0))
-                    .onTapGesture {
-                        chooseRandom2(times: 3)
-                        withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
-                            rotation2 += 360
-                        }
-                    }
-            }
+                }
             Spacer()
+            Image("pips \(randomValue2)")
+                .resizable()
+                .frame(width: 150, height: 150)
+                .rotationEffect(.degrees(rotation2))
+                .rotation3DEffect(.degrees(rotation2), axis: (x: 1, y: 1, z: 0))
+                .onTapGesture {
+                    chooseRandom2(times: 3)
+                    withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
+                        rotation2 += 360
+                    }
+                }
         }
+        .frame(maxHeight: .infinity)
     }
     
     func chooseRandom1(times: Int) {
