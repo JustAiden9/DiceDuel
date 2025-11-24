@@ -19,6 +19,10 @@ struct ContentView: View {
     @State private var hp2 = 100
     // Prevents both dice from rolling at the same time
     @State private var isRolling = false
+    @State private var currentRoller: Int? = nil
+    // Track whose turn it is (1 or 2)
+    @State private var currentTurn = 1
+    
     var body: some View {
         VStack {
             VStack(spacing: 4) {
@@ -29,16 +33,21 @@ struct ContentView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            .rotationEffect(.degrees(180))
             .padding(.bottom, 8)
             Image("pips \(randomValue1)")
                 .resizable()
                 .frame(width: 150, height: 150)
                 .rotationEffect(.degrees(rotation1))
                 .rotation3DEffect(.degrees(rotation1), axis: (x: 1, y: 1, z: 0))
+                .rotationEffect(.degrees(180))
+                .opacity(currentTurn != 1 ? 0.4 : 1.0)
+                .allowsHitTesting(currentTurn == 1)
                 .onTapGesture {
-                    // Stop if we're already rolling or someone has 0 HP
-                    guard !isRolling, hp1 > 0, hp2 > 0 else { return }
+                    // Stop if we're already rolling or someone has 0 HP or not player 1's turn
+                    guard !isRolling, hp1 > 0, hp2 > 0, currentTurn == 1 else { return }
                     isRolling = true
+                    currentRoller = 1
                     // Roll 3 times using simple recursion with delays; handles damage internally
                     chooseRandom1(times: 3)
                     withAnimation(.interpolatingSpring(stiffness: 10, damping: 2)) {
@@ -52,10 +61,13 @@ struct ContentView: View {
                 .frame(width: 150, height: 150)
                 .rotationEffect(.degrees(rotation2))
                 .rotation3DEffect(.degrees(rotation2), axis: (x: 1, y: 1, z: 0))
+                .opacity(currentTurn != 2 ? 0.4 : 1.0)
+                .allowsHitTesting(currentTurn == 2)
                 .onTapGesture {
-                    // Stop if we're already rolling or someone has 0 HP
-                    guard !isRolling, hp1 > 0, hp2 > 0 else { return }
+                    // Stop if we're already rolling or someone has 0 HP or not player 2's turn
+                    guard !isRolling, hp1 > 0, hp2 > 0, currentTurn == 2 else { return }
                     isRolling = true
+                    currentRoller = 2
                     // Roll 3 times using simple recursion with delays; handles damage internally
                     chooseRandom2(times: 3)
                     // Keep the existing visual spin
@@ -88,6 +100,9 @@ struct ContentView: View {
             let finalRoll = randomValue1
             hp2 = max(0, hp2 - finalRoll)
             isRolling = false
+            currentRoller = nil
+            // Switch to player 2's turn
+            currentTurn = 2
         }
     }
 
@@ -103,6 +118,9 @@ struct ContentView: View {
             let finalRoll = randomValue2
             hp1 = max(0, hp1 - finalRoll)
             isRolling = false
+            currentRoller = nil
+            // Switch to player 1's turn
+            currentTurn = 1
         }
     }
 }
