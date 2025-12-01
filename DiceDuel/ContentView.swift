@@ -207,6 +207,9 @@ struct ContentView: View {
             // max(0, ...) ensures the value never goes below 0
             // subtracts from the existing value, hp2 = hp2 - finalRoll
             hp2 = max(0, hp2 - finalRoll)
+            if finalRoll == 1 {
+                hp1 = min(50, hp1 + 10)
+            }
             isRolling = false
             currentRoller = nil
             // Check if game is over
@@ -231,6 +234,9 @@ struct ContentView: View {
         } else {
             let finalRoll = randomValue2
             hp1 = max(0, hp1 - finalRoll)
+            if finalRoll == 1 {
+                hp2 = min(50, hp2 + 10)
+            }
             isRolling = false
             currentRoller = nil
             // Check if game is over
