@@ -37,7 +37,7 @@ struct ContentView: View {
             Text("DICE DUEL")
                 .font(.system(size: 48, weight: .bold))
 
-            Text("First to reduce opponent's HP to 0 wins!")
+            Text("First to get their opponent's HP to 0 wins!")
                 .font(.title3)
                 .multilineTextAlignment(.center)
                 .padding()
@@ -45,6 +45,7 @@ struct ContentView: View {
                 .cornerRadius(12)
             
             Button(action: {
+                SoundSystem.playStart()
                 gameState = "playing"  // changes game state to playing
             }) {
                 Text("START GAME")
@@ -94,6 +95,7 @@ struct ContentView: View {
                 .allowsHitTesting(currentTurn == 1)  // Only accepts taps when it's P1's turn
                 .onTapGesture {
                     guard !isRolling, hp1 > 0, hp2 > 0, currentTurn == 1 else { return }
+                    SoundSystem.playP1()
                     // This guard says continue only if NOT rolling AND hp1 > 0 AND hp2 > 0 AND it's P1's turn
                     isRolling = true  // Set rolling state to true
                     currentRoller = 1  // Set current roller to player 1
@@ -113,7 +115,7 @@ struct ContentView: View {
                 .allowsHitTesting(currentTurn == 2)  // Only clickable on P2's turn
                 .onTapGesture {
                     guard !isRolling, hp1 > 0, hp2 > 0, currentTurn == 2 else { return }
-                    
+                    SoundSystem.playP2()
                     isRolling = true
                     currentRoller = 2
                     chooseRandom2(times: 3)
@@ -209,6 +211,7 @@ struct ContentView: View {
             currentRoller = nil
             // Check if game is over
             if hp2 <= 0 {  // If Player 2's HP is 0 or less
+                SoundSystem.playWin()
                 gameState = "ended"
                 return  // Exit the function to go to the end  screen
             }
@@ -232,6 +235,7 @@ struct ContentView: View {
             currentRoller = nil
             // Check if game is over
             if hp1 <= 0 {
+                SoundSystem.playWin()
                 gameState = "ended"
                 return
             }
