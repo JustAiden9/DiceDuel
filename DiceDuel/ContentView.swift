@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var hp1 = 50  // Player 1's health
     @State private var hp2 = 50  // Player 2's health
     @State private var isRolling = false
+    @State private var showInstructions = false
     @State private var currentRoller: Int? = nil  // Tracks which player (1 or 2) is currently rolling
     @State private var currentTurn = 1  // 1 = Player 1's turn, 2 = Player 2's turn
     @State private var gameState = "start"  // Can be: "start", "playing", or "ended"
@@ -57,8 +58,18 @@ struct ContentView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
             }
+            Button(action: {
+                showInstructions = true
+            }) {
+                Text("HOW TO PLAY")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+            }
         }
         .padding()
+        .sheet(isPresented: $showInstructions) {
+            InstructionsView()
+        }
     }
     
     var gameScreen: some View {
